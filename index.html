@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>서천중학교 급식 조회</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <div>
+          <p class="eyebrow">서천중학교 급식</p>
+          <h1>오늘의 급식 메뉴를 확인해요</h1>
+          <p class="subtext">
+            fmSeq 번호로 급식 상세 메뉴를 불러옵니다. 최신 급식을 보려면
+            번호를 변경해 보세요.
+          </p>
+        </div>
+        <div class="hero">
+          <img id="meal-photo" src="meal-photo.svg" alt="급식 사진 예시" />
+          <span class="badge">급식 사진</span>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>급식 조회</h2>
+        <form id="meal-form" class="form">
+          <label class="field">
+            <span>fmSeq 번호</span>
+            <input type="number" id="fmSeq" name="fmSeq" value="243715" min="1" required />
+          </label>
+          <button type="submit">급식 불러오기</button>
+          <div class="button-row">
+            <button type="button" id="prev-meal" class="ghost">이전 급식</button>
+            <button type="button" id="next-meal" class="ghost">다음 급식</button>
+            <button type="button" id="find-next" class="ghost">다음 급식 찾기</button>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="agent-toggle" />
+            <span>에이전트 모드: 급식이 있는 날까지 자동 탐색</span>
+          </label>
+        </form>
+        <p id="status" class="hint">* 번호는 급식이 등록된 날에만 존재할 수 있어요.</p>
+      </section>
+
+      <section class="card result">
+        <div class="result-header">
+          <h2>급식 상세</h2>
+          <span id="meal-date" class="tag">-</span>
+        </div>
+        <ul id="meal-items" class="meal-list"></ul>
+        <p id="meal-meta" class="meta"></p>
+      </section>
+
+      <section class="card">
+        <h2>급식 사진 업로드</h2>
+        <p class="hint">급식 사진을 올리면 상단에 미리보기로 표시됩니다.</p>
+        <label class="file-field">
+          <span>사진 선택</span>
+          <input type="file" id="photo-input" accept="image/*" />
+        </label>
+      </section>
+
+      <section class="card">
+        <h2>API 정보</h2>
+        <code>
+          POST https://seocheon-m.goeyi.kr/seocheon-m/ad/fm/foodmenu/selectFoodData.do
+        </code>
+        <p class="hint">본문: <strong>fmSeq</strong> 값만 보내면 됩니다.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>데이터 제공: seocheon-m.goeyi.kr</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
