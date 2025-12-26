@@ -49,6 +49,19 @@
           <h2>급식 상세</h2>
           <span id="meal-date" class="tag">-</span>
         </div>
+        <div class="week-nav">
+          <button type="button" id="prev-week" class="arrow">◀</button>
+          <div class="weekdays">
+            <button type="button" class="weekday" data-weekday="0">월</button>
+            <button type="button" class="weekday" data-weekday="1">화</button>
+            <button type="button" class="weekday" data-weekday="2">수</button>
+            <button type="button" class="weekday" data-weekday="3">목</button>
+            <button type="button" class="weekday" data-weekday="4">금</button>
+            <button type="button" class="weekday" data-weekday="5">토</button>
+            <button type="button" class="weekday" data-weekday="6">일</button>
+          </div>
+          <button type="button" id="next-week" class="arrow">▶</button>
+        </div>
         <ul id="meal-items" class="meal-list"></ul>
         <p id="meal-meta" class="meta"></p>
       </section>

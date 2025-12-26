@@ -176,6 +176,41 @@ button:hover {
   gap: 12px;
 }
 
+.week-nav {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.weekday,
+.arrow {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 8px;
+  background: #f3f4f6;
+  color: #1d1f26;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.weekday.active {
+  background: #1f3fff;
+  color: #fff;
+}
+
+.arrow {
+  width: 44px;
+  height: 44px;
+}
+
 .tag {
   background: #eef2ff;
   color: #1f3fff;

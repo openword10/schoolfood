@@ -10,9 +10,15 @@ const findNextButton = document.getElementById("find-next");
 const agentToggle = document.getElementById("agent-toggle");
 const photoInput = document.getElementById("photo-input");
 const mealPhoto = document.getElementById("meal-photo");
+const prevWeekButton = document.getElementById("prev-week");
+const nextWeekButton = document.getElementById("next-week");
+const weekdayButtons = Array.from(document.querySelectorAll(".weekday"));
 
 const API_URL =
   "https://seocheon-m.goeyi.kr/seocheon-m/ad/fm/foodmenu/selectFoodData.do";
+
+const weekdays = ["월", "화", "수", "목", "금", "토", "일"];
+const weekOffsets = new Map();
 
 const tryFixEncoding = (value) => {
   if (!value) return value;
@@ -26,6 +32,34 @@ const tryFixEncoding = (value) => {
     return value;
   }
   return value;
+};
+
+const formatDateTag = (dateInfo) => {
+  if (!dateInfo) return "-";
+  const date = new Date(dateInfo.year, dateInfo.month - 1, dateInfo.day);
+  const dayIndex = (date.getDay() + 6) % 7;
+  return `${dateInfo.year}.${String(dateInfo.month).padStart(2, "0")}.${String(
+    dateInfo.day
+  ).padStart(2, "0")} (${weekdays[dayIndex]})`;
+};
+
+const updateWeekNav = (dateInfo) => {
+  if (!dateInfo) return;
+  const baseDate = new Date(dateInfo.year, dateInfo.month - 1, dateInfo.day);
+  const mondayOffset = (baseDate.getDay() + 6) % 7;
+  const monday = new Date(baseDate);
+  monday.setDate(baseDate.getDate() - mondayOffset);
+
+  weekOffsets.clear();
+  weekdayButtons.forEach((button) => {
+    const offset = Number(button.dataset.weekday || 0);
+    const targetDate = new Date(monday);
+    targetDate.setDate(monday.getDate() + offset);
+    button.textContent = `${weekdays[offset]} ${targetDate.getDate()}`;
+    const deltaDays = Math.round((targetDate - baseDate) / 86400000);
+    weekOffsets.set(button, deltaDays);
+    button.classList.toggle("active", deltaDays === 0);
+  });
 };
 
 const decodeMenu = (value) => {
@@ -51,11 +85,8 @@ const renderMenu = (data) => {
   const menu = decodeMenu(data.fmCn || data.food?.fmCn);
   const dateInfo = data.food?.fmDt?.date;
 
-  mealDate.textContent = dateInfo
-    ? `${dateInfo.year}.${String(dateInfo.month).padStart(2, "0")}.${String(
-        dateInfo.day
-      ).padStart(2, "0")}`
-    : "날짜 정보 없음";
+  mealDate.textContent = dateInfo ? formatDateTag(dateInfo) : "날짜 정보 없음";
+  updateWeekNav(dateInfo);
 
   if (menu.length === 0) {
     mealItems.innerHTML = "<li>등록된 급식 메뉴가 없습니다.</li>";
@@ -132,6 +163,25 @@ prevButton.addEventListener("click", () => stepMeal(-1));
 nextButton.addEventListener("click", () => stepMeal(1));
 findNextButton.addEventListener("click", () => {
   findNextMeal();
+});
+
+weekdayButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const delta = weekOffsets.get(button);
+    if (delta === undefined) {
+      statusText.textContent = "먼저 급식을 불러와 주세요.";
+      return;
+    }
+    stepMeal(delta);
+  });
+});
+
+prevWeekButton.addEventListener("click", () => {
+  stepMeal(-7);
+});
+
+nextWeekButton.addEventListener("click", () => {
+  stepMeal(7);
 });
 
 photoInput.addEventListener("change", (event) => {
