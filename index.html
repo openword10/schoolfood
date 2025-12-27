@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>서천중학교 급식 조회</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <div>
+          <p class="eyebrow">서천중학교 급식</p>
+          <h1>요일을 눌러 급식 메뉴를 확인해요</h1>
+          <p class="subtext">
+            요일을 선택하면 해당 급식 메뉴와 사진만 보여줍니다.
+          </p>
+        </div>
+        <div class="hero">
+          <img id="meal-photo" src="meal-photo.svg" alt="급식 사진 예시" />
+          <span class="badge">급식 사진</span>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>요일 선택</h2>
+        <div class="week-nav simple">
+          <div class="weekdays">
+            <button type="button" class="weekday" data-weekday="0">월</button>
+            <button type="button" class="weekday" data-weekday="1">화</button>
+            <button type="button" class="weekday" data-weekday="2">수</button>
+            <button type="button" class="weekday" data-weekday="3">목</button>
+            <button type="button" class="weekday" data-weekday="4">금</button>
+            <button type="button" class="weekday" data-weekday="5">토</button>
+            <button type="button" class="weekday" data-weekday="6">일</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card result">
+        <div class="result-header">
+          <h2>급식 상세</h2>
+          <span id="meal-date" class="tag">-</span>
+        </div>
+        <ul id="meal-items" class="meal-list"></ul>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>데이터 제공: seocheon-m.goeyi.kr</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
