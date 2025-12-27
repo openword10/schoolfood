@@ -77,33 +77,12 @@ h1 {
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
-.form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: flex-end;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 200px;
-}
-
-input {
-  border-radius: 10px;
-  border: 1px solid #d6d9e0;
-  padding: 10px 12px;
-  font-size: 16px;
-}
-
 button {
   border: none;
   border-radius: 12px;
   padding: 12px 18px;
-  background: #1f3fff;
-  color: #fff;
+  background: #f3f4f6;
+  color: #1d1f26;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -112,52 +91,7 @@ button {
 
 button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(31, 63, 255, 0.2);
-}
-
-.button-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.ghost {
-  background: #eef2ff;
-  color: #1f3fff;
-  box-shadow: none;
-}
-
-.ghost:hover {
-  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.2);
-}
-
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #4b556a;
-}
-
-.toggle input {
-  width: 16px;
-  height: 16px;
-}
-
-.file-field {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
-  font-weight: 600;
-  color: #1d1f26;
-}
-
-.file-field input {
-  border: 1px dashed #c7cdda;
-  padding: 10px;
-  border-radius: 12px;
-  background: #f8fafc;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
 }
 
 .hint {
@@ -177,11 +111,14 @@ button:hover {
 }
 
 .week-nav {
-  margin-top: 16px;
+  margin-top: 8px;
   display: grid;
-  grid-template-columns: auto 1fr auto;
   gap: 12px;
   align-items: center;
+}
+
+.week-nav.simple {
+  margin-top: 0;
 }
 
 .weekdays {
@@ -190,8 +127,7 @@ button:hover {
   gap: 8px;
 }
 
-.weekday,
-.arrow {
+.weekday {
   border: none;
   border-radius: 12px;
   padding: 10px 8px;
@@ -204,11 +140,6 @@ button:hover {
 .weekday.active {
   background: #1f3fff;
   color: #fff;
-}
-
-.arrow {
-  width: 44px;
-  height: 44px;
 }
 
 .tag {

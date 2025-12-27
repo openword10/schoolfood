@@ -1,24 +1,15 @@
-const form = document.getElementById("meal-form");
-const fmSeqInput = document.getElementById("fmSeq");
 const mealItems = document.getElementById("meal-items");
 const mealDate = document.getElementById("meal-date");
-const mealMeta = document.getElementById("meal-meta");
-const statusText = document.getElementById("status");
-const prevButton = document.getElementById("prev-meal");
-const nextButton = document.getElementById("next-meal");
-const findNextButton = document.getElementById("find-next");
-const agentToggle = document.getElementById("agent-toggle");
-const photoInput = document.getElementById("photo-input");
 const mealPhoto = document.getElementById("meal-photo");
-const prevWeekButton = document.getElementById("prev-week");
-const nextWeekButton = document.getElementById("next-week");
 const weekdayButtons = Array.from(document.querySelectorAll(".weekday"));
 
 const API_URL =
   "https://seocheon-m.goeyi.kr/seocheon-m/ad/fm/foodmenu/selectFoodData.do";
+const DEFAULT_SEQ = 243715;
 
 const weekdays = ["월", "화", "수", "목", "금", "토", "일"];
 const weekOffsets = new Map();
+let currentSeq = DEFAULT_SEQ;
 
 const tryFixEncoding = (value) => {
   if (!value) return value;
@@ -73,12 +64,10 @@ const decodeMenu = (value) => {
 
 const renderMenu = (data) => {
   mealItems.innerHTML = "";
-  mealMeta.textContent = "";
 
   if (!data) {
     mealItems.innerHTML = "<li>급식 데이터를 불러오지 못했어요.</li>";
     mealDate.textContent = "-";
-    statusText.textContent = "급식 데이터를 가져오지 못했습니다. fmSeq를 확인해 주세요.";
     return;
   }
 
@@ -97,10 +86,6 @@ const renderMenu = (data) => {
       mealItems.appendChild(li);
     });
   }
-
-  const title = tryFixEncoding(data.fmTitle || data.food?.fmTitle || "");
-  mealMeta.textContent = `fmSeq: ${data.fmSeq || data.food?.fmSeq || "-"}${title ? ` · ${title}` : ""}`;
-  statusText.textContent = "급식 데이터를 불러왔습니다.";
 };
 
 const requestMeal = async (fmSeq) => {
@@ -120,76 +105,26 @@ const requestMeal = async (fmSeq) => {
 };
 
 const fetchMeal = async (fmSeq) => {
-  statusText.textContent = "급식 데이터를 불러오는 중...";
   const data = await requestMeal(fmSeq);
   renderMenu(data);
 };
 
 const stepMeal = (direction) => {
-  const current = Number(fmSeqInput.value || 0);
-  const nextValue = Math.max(1, current + direction);
-  fmSeqInput.value = String(nextValue);
+  const nextValue = Math.max(1, currentSeq + direction);
+  currentSeq = nextValue;
   fetchMeal(String(nextValue));
 };
-
-const findNextMeal = async () => {
-  const current = Number(fmSeqInput.value || 0);
-  const maxTries = agentToggle.checked ? 30 : 1;
-  statusText.textContent = "다음 급식을 찾는 중...";
-
-  for (let step = 1; step <= maxTries; step += 1) {
-    const candidate = current + step;
-    const data = await requestMeal(String(candidate));
-    const menu = decodeMenu(data?.fmCn || data?.food?.fmCn);
-    if (menu.length > 0) {
-      fmSeqInput.value = String(candidate);
-      renderMenu(data);
-      return;
-    }
-  }
-
-  statusText.textContent = "다음 급식을 찾지 못했어요. 번호를 직접 입력해 주세요.";
-};
-
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const fmSeq = fmSeqInput.value.trim();
-  if (fmSeq) {
-    fetchMeal(fmSeq);
-  }
-});
-
-prevButton.addEventListener("click", () => stepMeal(-1));
-nextButton.addEventListener("click", () => stepMeal(1));
-findNextButton.addEventListener("click", () => {
-  findNextMeal();
-});
 
 weekdayButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const delta = weekOffsets.get(button);
-    if (delta === undefined) {
-      statusText.textContent = "먼저 급식을 불러와 주세요.";
-      return;
-    }
+    if (delta === undefined) return;
     stepMeal(delta);
   });
 });
 
-prevWeekButton.addEventListener("click", () => {
-  stepMeal(-7);
+mealPhoto.addEventListener("error", () => {
+  mealPhoto.src = "meal-photo.svg";
 });
 
-nextWeekButton.addEventListener("click", () => {
-  stepMeal(7);
-});
-
-photoInput.addEventListener("change", (event) => {
-  const [file] = event.target.files;
-  if (!file) return;
-  const url = URL.createObjectURL(file);
-  mealPhoto.src = url;
-  mealPhoto.alt = "업로드한 급식 사진";
-});
-
-fetchMeal(fmSeqInput.value.trim());
+fetchMeal(String(currentSeq));
